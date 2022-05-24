@@ -3,7 +3,6 @@ const database = require('../database_connection/databaseConnection')
 module.exports.findAllAccountsSQL = async () => {
     return await database.any('SELECT * FROM account')
         .then(function(data){
-            console.log(data)
             return data;
         })
         .catch(function(error) {

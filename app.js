@@ -7,11 +7,7 @@ const accountRoute = require('./routes/account.route')(app)
 
 
 app.get('/', (req, res) => {
-    res.send('Get')
-})
-
-app.get('/test', (req, res) => {
-    res.send('TESTTT')
+    res.send('Backend')
 })
 
 app.listen(process.env.PORT, () => {
