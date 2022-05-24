@@ -1,15 +1,30 @@
 require('dotenv').config();
-const http = require('http');
+const express = require('express')
+const app = express()
+const pgp = require('pg-promise')()
 
-// Create an instance of the http server to handle HTTP requests
-let app = http.createServer((req, res) => {
-    // Set a response type of plain text for the response
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+const connection = {
+    connectionString: 'postgres://' +
+        process.env.DATABASE_USERNAME + ':' +
+        process.env.DATABASE_PASSWORD + '@' +
+        process.env.DATABASE_IP_ADDRESS + '/'+
+        process.env.DATABASE + '',
+    max: 30
+}
+const db = pgp(connection)
 
-    // Send back a response and end the connection
-    res.end('Hello World!\n');
-});
+db.one('SELECT $1 AS value', 123)
+    .then((data) => {
+        console.log('DATA:', data.value)
+    })
+    .catch((error) => {
+        console.log('ERROR:', error)
+    })
 
-// Start the server on port 3000
-app.listen(process.env.PORT, process.env.IP_ADDRESS);
-console.log('Node server running on port: ' + process.env.PORT);
+app.get('/', (req, res) => {
+    res.send('Get')
+})
+
+app.listen(process.env.PORT, () => {
+    console.log("Node server listening on port: " + process.env.PORT)
+})
