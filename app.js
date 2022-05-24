@@ -1,3 +1,4 @@
+require('dotenv').config();
 const http = require('http');
 
 // Create an instance of the http server to handle HTTP requests
@@ -10,5 +11,5 @@ let app = http.createServer((req, res) => {
 });
 
 // Start the server on port 3000
-app.listen(3000, '127.0.0.1');
-console.log('Node server running on port 3000');
+app.listen(process.env.PORT, process.env.IP_ADDRESS);
+console.log('Node server running on port: ' + process.env.PORT);
