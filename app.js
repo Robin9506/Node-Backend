@@ -2,10 +2,15 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 
-const database = require('./DatabaseConnection/databaseConnection')
+const newsRoute = require('./routes/news.route')(app)
+
 
 app.get('/', (req, res) => {
     res.send('Get')
+})
+
+app.get('/test', (req, res) => {
+    res.send('TESTTT')
 })
 
 app.listen(process.env.PORT, () => {
