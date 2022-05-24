@@ -1,6 +1,6 @@
 module.exports = app => {
-    const newsController = require('../controller/news.controller')
+    const accountController = require('../controller/account.controller')
 
-    app.get('/account', newsController().findAll)
+    app.get('/account', accountController.findAll)
 }
 

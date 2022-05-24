@@ -9,7 +9,7 @@ const news = function(news) {
     this.featured = news.featured;
 };
 
-module.exports.findAllNewsSQL = async result => {
+module.exports.findAllNewsSQL = async () => {
     return await database.any('SELECT * FROM news')
         .then(function(data){
             return data;

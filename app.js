@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 
 const newsRoute = require('./routes/news.route')(app)
+const accountRoute = require('./routes/account.route')(app)
 
 
 app.get('/', (req, res) => {
