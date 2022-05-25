@@ -2,9 +2,9 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 
-const newsRoute = require('./routes/news.route')(app)
-const accountRoute = require('./routes/account.route')(app)
+app.use(express.json());
 
+const routes = require('./routes/routeList/routes')(app)
 
 app.get('/', (req, res) => {
     res.send('Backend')
