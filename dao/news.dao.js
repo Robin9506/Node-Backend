@@ -9,16 +9,16 @@ const News = function(news) {
     this.featured = news.featured;
 };
 
-News.postNews = async (newsObject, result) => {
+News.postNews = (newsObject) => {
     return database.none('INSERT INTO News(title, text, date, status, featured) VALUES ($1, $2, $3, $4, $5)',
         [newsObject.title, newsObject.text, newsObject.date, newsObject.status, newsObject.featured])
         .then(function(){
-            console.log("ITEM PLACED")
-            result();
+
+        }, function(error){
+            return error
         })
-        .catch(function() {
-            console.log("ITEM NOT PLACED")
-            result();
+        .catch(function(error) {
+            return error
         });
 }
 
