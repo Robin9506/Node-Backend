@@ -1,5 +1,4 @@
 const database = require('../database_connection/databaseConnection')
-const {response} = require("express");
 
 const News = function(news) {
     this.title = news.title;
@@ -9,7 +8,7 @@ const News = function(news) {
     this.featured = news.featured;
 };
 
-News.postNews = (newsObject) => {
+News.postNews = newsObject => {
     return database.none('INSERT INTO News(title, text, date, status, featured) VALUES ($1, $2, $3, $4, $5)',
         [newsObject.title, newsObject.text, newsObject.date, newsObject.status, newsObject.featured])
         .then(function(){
@@ -29,6 +28,16 @@ News.getAllNews = async result => {
         }, )
         .catch(function() {
             result();
+        });
+}
+
+News.delete = async (newsID) => {
+    return await database.result('DELETE FROM News WHERE id = $1', newsID)
+        .then(function (rowCount){
+            return rowCount.rowCount;
+        })
+        .catch(function(error) {
+            return error;
         });
 }
 
