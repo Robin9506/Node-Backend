@@ -1,5 +1,4 @@
 const database = require('../database_connection/databaseConnection')
-const {json} = require("express");
 
 const News = function(news) {
     this.title = news.title;

@@ -39,7 +39,7 @@ exports.findOneNewsItem = (request, response) => {
         .then(function (newsItem){
             if (!newsItem){
                 return response.status(HTTP_ENUMS.NOT_FOUND).send(
-                    "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): "+ "News item couldn't be found")
+                    "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): "+ "News item(id: " + request.params.newsID + ")" +" couldn't be found")
             }
             return response.status(HTTP_ENUMS.SUCCESS).send(newsItem);
         });
