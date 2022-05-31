@@ -58,7 +58,6 @@ exports.updateNewsItem = (request, response) => {
 
     News.updateNewsItem(news, request.params.newsID)
         .then(function (callback){
-            console.log(callback);
             if(callback.success){
                 return response.status(HTTP_ENUMS.SUCCESS).send(
                     "Status Code (" + HTTP_ENUMS.SUCCESS + "): " + "News item successfully updated with id: " + callback.newsID)
