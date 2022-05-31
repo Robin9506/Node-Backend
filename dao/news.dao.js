@@ -1,4 +1,5 @@
 const database = require('../database_connection/databaseConnection')
+const {json} = require("express");
 
 const News = function(news) {
     this.title = news.title;
@@ -37,6 +38,28 @@ News.getOneNewsItem = async (newsID) => {
             return data;
         })
         .catch(function() {
+        });
+}
+
+News.updateNewsItem = async(newsObject, newsID) => {
+    return await database.result('UPDATE News SET title = $1, text = $2, date = $3, status = $4, featured = $5 WHERE id = $6',
+        [newsObject.title,
+        newsObject.text,
+        newsObject.date,
+        newsObject.status,
+        newsObject.featured,
+        newsID])
+        .then(function(result){
+            return {
+                success: result.rowCount,
+                newsID: newsID
+            };
+        })
+        .catch(function(error){
+            return {
+                error: error.routine,
+                newsID: newsID
+            };
         });
 }
 

@@ -2,12 +2,10 @@ const News = require('../dao/news.dao')
 const HTTP_ENUMS = require('../utilities/http_enums')
 
 exports.postNews = (request, response) => {
-    //console.log(request.body.length);
-    if (!request.body) {
-        return response.status(HTTP_ENUMS.NOT_FOUND).send({
-            message: "Content can not be empty!"
-        });
-    }
+    /*if (!request.body.length) {
+        return response.status(HTTP_ENUMS.NOT_FOUND).send(
+            "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): " + "Body is empty");
+    }*/
     const news = new News({
         title: request.body.title,
         text: request.body.text,
@@ -45,6 +43,43 @@ exports.findOneNewsItem = (request, response) => {
             }
             return response.status(HTTP_ENUMS.SUCCESS).send(newsItem);
         });
+}
+
+exports.updateNewsItem = (request, response) => {
+
+
+    const news = new News({
+        title: request.body.title,
+        text: request.body.text,
+        date: request.body.date,
+        status: request.body.status,
+        featured: request.body.featured
+    });
+
+    News.updateNewsItem(news, request.params.newsID)
+        .then(function (callback){
+            console.log(callback);
+            if(callback.success){
+                return response.status(HTTP_ENUMS.SUCCESS).send(
+                    "Status Code (" + HTTP_ENUMS.SUCCESS + "): " + "News item successfully updated with id: " + callback.newsID)
+            }
+
+            if (callback.error){
+                return response.status(HTTP_ENUMS.SERVICE_UNAVAILABLE).send(
+                    "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): "+ "Service Unavailable")
+            }
+
+
+
+            return response.status(HTTP_ENUMS.NOT_FOUND).send(
+                "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): "+ "News item with id: " + callback.newsID + " not found")
+
+        })
+        .catch(function(){
+            return response.status(HTTP_ENUMS.SERVICE_UNAVAILABLE).send(
+                "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): "+ "Service Unavailable")
+        })
+
 }
 
 exports.deleteNews = (request, response) => {

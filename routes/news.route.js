@@ -6,5 +6,7 @@ module.exports = app => {
     app.get('/news', newsController.findAllNews)
     app.get('/news/:newsID', newsController.findOneNewsItem)
 
+    app.put('/news/update/:newsID', newsController.updateNewsItem)
+
     app.delete('/news/delete/:newsID', newsController.deleteNews)
 }
