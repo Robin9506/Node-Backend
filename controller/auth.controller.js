@@ -5,14 +5,12 @@ const HTTP_ENUMS = require("../utilities/http_enums");
 exports.login = (request, response) =>{
     Auth.login(request.body)
         .then(function (account){
-            console.log(account);
             const token = jwt.signJWT(account)
 
             console.log("token: " + token);
 
-            jwt.verifyJWT(token)
             return response.status(HTTP_ENUMS.SUCCESS).send(
-                "Status Code (" + HTTP_ENUMS.SUCCESS + "): " + "Login successful: ")
+                "Status Code (" + HTTP_ENUMS.SUCCESS + "): " + "Login successful")
         })
         .catch(function (){
             return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
