@@ -36,8 +36,19 @@ exports.findAllNews = (request, response) => {
         }));
 }
 
-exports.deleteNews = (request, response, result) => {
-        News.delete(request.params.newsID, result)
+exports.findOneNewsItem = (request, response) => {
+    News.getOneNewsItem(request.params.newsID)
+        .then(function (newsItem){
+            if (!newsItem){
+                return response.status(HTTP_ENUMS.NOT_FOUND).send(
+                    "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): "+ "News item couldn't be found")
+            }
+            return response.status(HTTP_ENUMS.SUCCESS).send(newsItem);
+        });
+}
+
+exports.deleteNews = (request, response) => {
+        News.deleteNews(request.params.newsID)
             .then(function (rowCount) {
                 if(rowCount === 0) {
                     return response.status(HTTP_ENUMS.NOT_FOUND).send(

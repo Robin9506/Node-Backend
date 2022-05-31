@@ -31,7 +31,16 @@ News.getAllNews = async result => {
         });
 }
 
-News.delete = async (newsID) => {
+News.getOneNewsItem = async (newsID) => {
+    return await database.one('SELECT * FROM News WHERE id = $1', newsID)
+        .then(function(data){
+            return data;
+        })
+        .catch(function() {
+        });
+}
+
+News.deleteNews = async (newsID) => {
     return await database.result('DELETE FROM News WHERE id = $1', newsID)
         .then(function (rowCount){
             return rowCount.rowCount;
