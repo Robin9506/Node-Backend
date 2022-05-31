@@ -1,5 +1,7 @@
 const News = require('../dao/news.dao')
 const HTTP_ENUMS = require('../utilities/http_enums')
+const {verifyJWT} = require("../utilities/jwt");
+const role = require("../utilities/role");
 
 exports.postNews = (request, response) => {
     /*if (!request.body.length) {
@@ -82,24 +84,29 @@ exports.updateNewsItem = (request, response) => {
 }
 
 exports.deleteNews = (request, response) => {
+    if (verifyJWT(request, response).role === role.ADMIN) {
         News.deleteNews(request.params.newsID)
             .then(function (rowCount) {
-                if(rowCount === 0) {
+                if (rowCount === 0) {
                     return response.status(HTTP_ENUMS.NOT_FOUND).send(
-                        "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): "+ "News item couldn't be found")
-                }
-                else if(rowCount === 1) {
+                        "Status Code (" + HTTP_ENUMS.NOT_FOUND + "): " + "News item couldn't be found")
+                } else if (rowCount === 1) {
                     return response.status(HTTP_ENUMS.SUCCESS).send(
                         "Status Code (" + HTTP_ENUMS.SUCCESS + "): " + "News item deleted")
                 }
 
                 return response.status(HTTP_ENUMS.SERVICE_UNAVAILABLE).send(
-                    "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): "+ "Service Unavailable")
+                    "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): " + "Service Unavailable")
             })
-            .catch((function(){
-                return response.status(HTTP_ENUMS.SERVICE_UNAVAILABLE).send(
-                    "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): "+ "Service Unavailable")
-            }));
+            .catch((function () {
+                    return response.status(HTTP_ENUMS.SERVICE_UNAVAILABLE).send(
+                        "Status Code (" + HTTP_ENUMS.SERVICE_UNAVAILABLE + "): " + "Service Unavailable")
+                })
+            );
+    }
+
+    return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
+        "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + "Authorization needed");
 }
 
 
