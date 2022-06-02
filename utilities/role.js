@@ -1,7 +1,8 @@
 const ROLE = {
     ADMIN: "ADMIN",
     DEVELOPER: "DEV",
-    USER: "USER"
+    USER: "USER",
+    NON_USER: "NON_USER"
 
 }
 

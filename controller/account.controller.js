@@ -1,15 +1,20 @@
 const account = require('../dao/account.dao')
 const role = require('../utilities/role')
 const {verifyJWT} = require("../utilities/jwt");
-const HTTP_ENUMS = require("../utilities/http_enums");
+const {isRoleEmptyJWT} = require("../utilities/jwt_error_handler");
+const {compareRoles} = require("../utilities/role_handler");
 
 exports.findAll = (request, response) => {
-    if (verifyJWT(request, response).role === role.ADMIN){
+    const token = verifyJWT(request, response);
+    const tokenRole = isRoleEmptyJWT(token).role
+
+    if (compareRoles(tokenRole, role.DEVELOPER, response) === true){
         return account.findAllAccountsSQL().then(r => response.send(r))
     }
 
-    return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
-        "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + "Authorization needed");
+
+
+
 
 
 
