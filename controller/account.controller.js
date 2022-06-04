@@ -8,7 +8,7 @@ exports.findAll = (request, response) => {
     const token = verifyJWT(request, response);
     const tokenRole = isRoleEmptyJWT(token).role
 
-    if (compareRoles(tokenRole, role.DEVELOPER, response) === true){
+    if (compareRoles(tokenRole, role.ADMIN, response) === true){
         return account.findAllAccountsSQL().then(r => response.send(r))
     }
 

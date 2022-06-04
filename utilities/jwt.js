@@ -2,7 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const HTTP_ENUMS = require("../utilities/http_enums");
 const {requireAuthorizationHeader} = require("./http_headers");
-const {returnErrorJWT} = require("./jwt_error_handler");
+const {returnErrorJWT, returnErrorResponseJWT} = require("./jwt_error_handler");
 const jwt_error_enums = require('./jwt_error_enums')
 
 exports.signJWT = (account) => {
@@ -24,33 +24,10 @@ exports.verifyJWT = (request, response, token) => {
             returnResponseJWT(token);
         }
     }catch (e){
-        const error = {
-            jwt_error: returnErrorJWT(e.name)
-        }
-        returnResponseJWT(token, error)
+        returnResponseJWT(token, returnErrorJWT(e.name))
     }
 
     function returnResponseJWT(token, error) {
-        console.log(token + " " + error.jwt_error)
-        if (token !== undefined){
-            if(error.jwt_error === jwt_error_enums.JSON_WEB_TOKEN_ERROR){
-                return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
-                    "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + jwt_error_enums.JSON_WEB_TOKEN_ERROR);
-            }
-            else if (error.jwt_error === jwt_error_enums.TOKEN_EXPIRED){
-                return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
-                    "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + jwt_error_enums.TOKEN_EXPIRED);
-            }
-
-            else if (error.jwt_error === jwt_error_enums.NOT_BEFORE_ERROR){
-                return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
-                    "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + jwt_error_enums.NOT_BEFORE_ERROR);
-            }
-
-        }
-
-        return response.status(HTTP_ENUMS.METHOD_NOT_ALLOWED).send(
-            "Status Code (" + HTTP_ENUMS.METHOD_NOT_ALLOWED + "): " + "Token is Empty");
-
+        returnErrorResponseJWT(token, error, response);
     }
 }
